@@ -12,7 +12,7 @@ The result is a Dockerfile. It downloads all the files from Saratoga. It run scr
 
 Not shown here, but the image that is created here, I put it on Docker Hub so that I can run this software on my Kubernetes Cluster.
 
-## Dockerfile and docker-compose.yml
+## Dockerfile 
 The Dockerfile builds the image.  The contents is mostly derived from the [Saratoga Weather Installation instructions](https://saratoga-weather.org/wxtemplates/install.php). You'll see that I start with a Debian Linux based apache server with php-7.2.  I download the USA Template and the Cumulus Plugin files. I also download the icon files.  After everything is downloaded and unzipped, I run a shell script that edits many key files (eg Settings.php, Settings-weather, etc). 
 
 ```
@@ -81,29 +81,21 @@ jkozik@u2004:~/projects/InstallSCW.com$ curl http://localhost:8084
 ' ' ' 
 ```
 And also check from a browser:
+![image](https://github.com/user-attachments/assets/1597f18b-a875-4314-ba80-4b4205c3290d)
 
-
-
-
-
-
-
-# InstallSCW.com
-SanCapWeather.com is made from the scripts at Saratoga Weather. With this repository, I hope to automate putting these scripts into a docker container, making it easier for me to keep up to date and move as my server environment evolves.
-
-The weather station is an Ambient Weather WS-2000. The console collects data from the weather station sensor array, displays it locally and sends the data every minute or so to AmbientWeather.net.  This server has open APIs and using the AWS plugin, the Saratoga Weather software nicely creates a dynamic weather web page.
-
-This repository fetches the Saratoga weather scripts, customizes them for my weather station, and spins up a container that runs the scripts in an apache linux environment.
-
-Clone the repository, build and run it as follows:
-
+## Check container for realtime.txt
+WIth the container running, it is good to check the mount point, verify that realtime.txt is current and readable.
 ```
-$ git clone https://github.com/jkozik/InstallSCW.com
-# Optionally edit customerSettings.sh 
-$ docker build -t jkozik/scw.com .
-$ docker run -dit --name scw.com-app -p 8084:80 jkozik/scw.com
+jkozik@u2004:~/projects/InstallSCW.com$ docker exec -it scwenvoy.com-app /bin/bash
+root@c9d7495938f6:/var/www/html# cd mount/cumulus/
+root@c9d7495938f6:/var/www/html/mount/cumulus# ls -lasth realtime.txt
+4.0K -rw-r--r-- 1 1004 1005 268 Jul  9 21:52 realtime.txt
+root@c9d7495938f6:/var/www/html/mount/cumulus# date
+Wed Jul  9 21:53:07 UTC 2025
+root@c9d7495938f6:/var/www/html/mount/cumulus# cat realtime.txt
+09/07/25 17:52:51 93.4 64 79.4 0.0 0.0 0 0.00 0.00 30.044 --- 0 mph F in in 16.2 -0.019 5.50 6.20 0.00 83.1 39 93.4 0 94.1 15:26 79.1 04:25 3.0 09:54 10.0 10:35 30.147 12:01 30.039 17:18 1.9.4 1099 2.0 111.7 117.6 0.0 0.000 0 0 0.00 15 0 0 --- 3183 ft 106.5 0.0 0 0
+root@c9d7495938f6:/var/www/html/mount/cumulus#
 ```
-This should work, but verify it by going to a browser and try http://192.168.x.y/wxindex.php:8084
 
 To help with troubleshooting, you'll need the following commands:
 ```
@@ -112,11 +104,3 @@ $ docker exec -it scw.com-app /bin/bash
 $ docker logs -f scw.com-app
 $ docker stop scw.com-app; docker rm scw.com-app
 ```
-The AWN-Plugin needs a helper cronjob to fetch and save yesterday's data.  Since it is kinda hard to do more than one task per container, I decided to use the host's cron to trigger a daily polling of yesterday's data from the AmbientWeather.net API.  The cronjob needs to execute a php script on the web server.  It is easily run with a wget/curl one line script. I run this every hour a 58 minutes past.  The actual php file does timezone checking and only really fetches the data at 11:59pm every day. 
-
-cronjob on host (not in docker container):
-```
-58 * * * * wget http://192.168.100.178:8084/saveYesterday.php >> /home/jkozik/logs/awn.log 2>&1
-#blank line
-```
-
