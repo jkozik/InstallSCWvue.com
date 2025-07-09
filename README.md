@@ -12,7 +12,7 @@ The result is a Dockerfile. It downloads all the files from Saratoga. It run scr
 
 Not shown here, but the image that is created here, I put it on Docker Hub so that I can run this software on my Kubernetes Cluster.
 
-## Dockerfile and docker-compose.yml
+## Dockerfile 
 The Dockerfile builds the image.  The contents is mostly derived from the [Saratoga Weather Installation instructions](https://saratoga-weather.org/wxtemplates/install.php). You'll see that I start with a Debian Linux based apache server with php-7.2.  I download the USA Template and the Cumulus Plugin files. I also download the icon files.  After everything is downloaded and unzipped, I run a shell script that edits many key files (eg Settings.php, Settings-weather, etc). 
 
 ```
