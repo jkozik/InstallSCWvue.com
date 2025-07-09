@@ -1,0 +1,11 @@
+services:
+  scwvue.com:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: jkozik/scwvue.com
+    ports:
+      - "8084:80"      
+    container_name: swcvue.com-app
+    volumes:
+      - /mnt/sancap_share:/var/www/html/mount
