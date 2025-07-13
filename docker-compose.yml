@@ -6,6 +6,6 @@ services:
     image: jkozik/scwvue.com
     ports:
       - "8084:80"      
-    container_name: swcvue.com-app
+    container_name: scwvue.com-app
     volumes:
       - /mnt/sancap_share:/var/www/html/mount

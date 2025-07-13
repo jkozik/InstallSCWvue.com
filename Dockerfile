@@ -37,6 +37,7 @@ RUN cd /var/www/html && \
 
 COPY flyout-menu.xml /var/www/html
 #COPY  saveYesterday.php /var/www/html
+COPY wxweatherlink.php /var/www/html
 COPY  wxtides.php /var/www/html
 
 RUN chown -R www-data:www-data * && \

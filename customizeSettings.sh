@@ -79,12 +79,14 @@ sed -i '/External Links/, /^<.ul>/ c\
    <li><a href="http://www.findu.com/cgi-bin/wxpage.cgi?call=FW8511" title="FW8511">APRS-FW8511</a></li>\
    <li><a href="https://www.pwsweather.com/station/pws/sancapweather" title="PWS-SANCAPWEATHER">PWS-SanCap</a></li>\
    <li><a href="https://sancapweather.com/wxtides.php" title="Captive/Sound Tides">Tides</a></li>\
+   <li><a href="http://sancapweather.com/wxweatherlink.php" title="WeatherLink"">WeatherLink</a></li>\
 </ul>\
 ' menubar.php
 
 echo "Customize flyout-menu.xml"
 sed -i '/Nearby METAR Reports/a\
                 <item caption="Steel Guages" link="wxssgauges.php"/>\
+                <item caption="WeatherLink" link="wxweatherlink.php"/>\
      
 ' flyout-menu.xml
 
