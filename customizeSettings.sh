@@ -123,3 +123,6 @@ sed -i  -e '/wxindex/s/wxindex/index/' flyout-menu.xml
 
 echo "New Radar view in Settings.php"
 sed -i -e '/NWSregion/s/sw/se/' Settings.php
+
+echo "Fix PHP 8.1 deprecation in CU-defs.php"
+sed -i '/windlabel\[ fmod/s/fmod(/(int)fmod(/' CU-defs.php
