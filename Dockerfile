@@ -1,10 +1,10 @@
-FROM php:8.1-apache 
-RUN apt update && apt -y install vim unzip wget libpng-dev zlib1g-dev libonig-dev && \
-    docker-php-ext-install calendar && \
-    docker-php-ext-install mbstring && \
-    docker-php-ext-install gd && \
-    apt clean
-
+FROM php:8.2-apache
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        vim unzip wget libpng-dev zlib1g-dev \
+        libjpeg-dev libfreetype6-dev libonig-dev && \
+    docker-php-ext-configure gd --with-freetype --with-jpeg && \
+    docker-php-ext-install calendar mbstring gd && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /var/www/html
 
@@ -50,7 +50,7 @@ RUN chown -R www-data:www-data * && \
 
 
 COPY customizeSettings.sh /var/www/html/
-#COPY wxwebcam.php /var/www/html
+COPY wxwebcam.php /var/www/html
 
 RUN sed -i -e '/^#AddDef/s/\#AddDef/AddDef/' /etc/apache2/conf-enabled/charset.conf && \
     sed -i -e '/fcsticonstype/s/jpg/gif/' Settings.php && \
