@@ -104,3 +104,6 @@ $ docker exec -it scw.com-app /bin/bash
 $ docker logs -f scw.com-app
 $ docker stop scw.com-app; docker rm scw.com-app
 ```
+
+---
+**Security note (Nov 2026):** `jkozik/scwvue.com:v2.7` was rebuilt on PHP 8.2.35 to fix the critical PHP2Shell RCE vulnerabilities ([CVE-2026-109618 / CVE-2026-109619](https://www.netspi.com/blog/executive-blog/critical-vulnerability/php2shell-unauthenticated-rce-on-php-cve-2026-109618-cve-2026-109619/)). The Dockerfile also sets `session.upload_progress.enabled=0` as extra hardening.
